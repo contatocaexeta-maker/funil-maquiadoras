@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[TESTE] Tráfego pago para maquiadoras</title>
+
+<!-- =========================================================
+     GOOGLE TAG MANAGER
+     ========================================================= -->
+
+<!-- ========================================================= -->
+
+<!-- O Meta Pixel (ID 1001727392691930) NÃO fica aqui: ele entra como tag
+     base no GTM (Custom HTML, All Pages), e cada evento do dataLayer abaixo
+     vira uma tag trackCustom sequenciada depois dela. Assim não dispara
+     duplicado. -->
+
+<!-- Calendly: abre a conexao antes da hora, pra tela final nao esperar DNS/TLS -->
+<link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+<link rel="preconnect" href="https://calendly.com" crossorigin>
+
+<!-- Fonte Lato (checklist da capa) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #fff;
+    color: #2B2126;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 4px;
+    background: #8E4A63;
+    width: 0%;
+    transition: width 0.4s ease;
+    z-index: 10;
+  }
+
+  .wrap {
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .screen {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- CAPA ---------- */
+  .cover h1 {
+    font-size: clamp(23px, 6.4vw, 33px);
+    font-weight: 900;
+    line-height: 1.32;
+    letter-spacing: -0.015em;
+    margin: 0 0 22px;
+    text-align: left;
+    /* distribui as linhas em vez de deixar uma palavra sozinha na ultima */
+    text-wrap: balance;
+  }
+  /* destaque igual ao do criativo: tarja clara atras da palavra-chave.
+     nowrap e' o ponto critico: sem ele a tarja parte no meio da expressao. */
+  .cover h1 .hl {
+    display: inline-block;
+    white-space: nowrap;
+    color: #85455C;
+    background: #FAEBF0;
+    border-radius: 5px;
+    padding: 0 8px;
+  }
+
+  .bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 26px;
+  }
+  .bullets li {
+    /* nowrap + clamp: o bullet encolhe em vez de quebrar linha no celular */
+    white-space: nowrap;
+    font-size: clamp(14px, 4.3vw, 17px);
+    line-height: 1.75;
+    text-align: left;
+  }
+  .bullets .b-emoji { margin-right: 10px; }
+
+  .cover-footer {
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: #6B5560;
+    border-left: 3px solid #8E4A63;
+    padding-left: 12px;
+    margin: 0 0 26px;
+    text-align: left;
+  }
+
+  .step-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #8E4A63;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-size: 28px;
+    line-height: 1.3;
+    margin: 0 0 32px;
+  }
+
+  input[type="tel"],
+  input[type="text"] {
+    width: 100%;
+    padding: 16px 18px;
+    border: 2px solid #EDDDE3;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: inherit;
+    margin-bottom: 20px;
+  }
+  input[type="tel"]:focus,
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #8E4A63;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: #8C7480;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 16px;
+  }
+  .back-btn:hover { color: #8E4A63; }
+
+  .primary-btn {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 18px 16px;
+    background: #8E4A63;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    /* nowrap + clamp: o CTA encolhe em vez de quebrar linha no celular */
+    white-space: nowrap;
+    font-size: clamp(15px, 4.4vw, 17px);
+    font-weight: 800;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(142, 74, 99, 0.26);
+    transition: background 0.15s, transform 0.05s;
+  }
+  .primary-btn:hover { background: #74384E; }
+  .primary-btn:active { transform: translateY(1px); }
+  .primary-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  p.subtitle {
+    color: #6B5560;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: -20px 0 28px;
+  }
+
+  .error {
+    color: #d93025;
+    font-size: 13px;
+    margin: -12px 0 16px;
+    display: none;
+  }
+  .phone-row + .error { margin-top: 8px; }
+
+  .light-heading { font-weight: 400; }
+  .required-mark { color: #d93025; }
+
+  .letter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .letter-option {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #EDDDE3;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 16px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .letter-option:hover { border-color: #8E4A63; background: #FDF6F8; }
+  .letter-option.selected { border-color: #8E4A63; background: #FDF6F8; }
+  .letter-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 2px solid #EDDDE3;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    margin-right: 14px;
+    flex-shrink: 0;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+  }
+  .letter-option.selected .letter-badge { border-color: #8E4A63; background: #8E4A63; color: #fff; }
+
+  /* Calendly embutido na tela final.
+     A altura fica na nossa classe: o script do Calendly nao aplica classe
+     nenhuma no container, e sem isso o iframe colapsa pra ~150px. */
+  .calendly-box {
+    width: 100%;
+    min-width: 320px;
+    height: 700px;
+  }
+  .calendly-wrap { position: relative; }
+  .calendly-skeleton {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FDF6F8;
+    border: 1px solid #F2E1E7;
+    border-radius: 12px;
+    color: #8C7480;
+    font-size: 14px;
+    animation: pulsa 1.4s ease-in-out infinite;
+  }
+  .calendly-skeleton.fim { display: none; }
+  /* quando o embed nao carrega (rede, adblock, bloqueio do Calendly): o
+     esqueleto vira um caminho de saida em vez de deixar a tela vazia */
+  .calendly-skeleton.erro {
+    animation: none;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px 24px;
+    text-align: center;
+    color: #6B5560;
+    line-height: 1.5;
+  }
+  .calendly-skeleton.erro .primary-btn { width: auto; padding: 16px 26px; }
+  @keyframes pulsa {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+  .calendly-box iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  @media (max-width: 600px) {
+    .calendly-box { height: 1000px; }
+  }
+  /* a tela do agendamento e' alta: o corpo para de centralizar e deixa rolar */
+  body.tela-agendamento { align-items: flex-start; }
+  .calendly-fallback {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: #8C7480;
+    margin-top: 10px;
+  }
+
+  /* Card de recomendação de investimento */
+  .rec-card {
+    background: #FDF6F8;
+    border: 1px solid #F2E1E7;
+    border-left: 4px solid #C98BA2;
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin: 0 0 24px;
+  }
+  .rec-card p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: #38292F;
+  }
+  .rec-card strong { font-weight: 900; color: #2B2126; }
+
+  .enter-hint {
+    color: #A2919A;
+    font-size: 13px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .enter-hint kbd {
+    background: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-family: inherit;
+    font-size: 12px;
+  }
+
+  .phone-row {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    position: relative;
+  }
+  .country-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #EDDDE3;
+    padding: 16px 4px;
+    font-size: 18px;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #2B2126;
+  }
+  .country-btn:hover, .country-btn:focus {
+    outline: none;
+    border-color: #8E4A63;
+  }
+  .country-chevron { font-size: 11px; color: #8C7480; }
+
+  input.underline {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid #EDDDE3;
+    padding: 16px 4px;
+    margin-bottom: 0;
+  }
+  input.underline:focus { border-color: #8E4A63; }
+
+  .country-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    width: 320px;
+    max-width: 90vw;
+    max-height: 320px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #EDDDE3;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+    z-index: 30;
+    display: none;
+  }
+  .country-dropdown.open { display: block; }
+  .country-search {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .country-search input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #EDDDE3;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 0;
+  }
+  .country-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  .country-option:hover { background: #FDF6F8; }
+  .country-option .cflag { margin-right: 8px; }
+  .country-option .ccode { color: #8C7480; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Honeypot anti-bot: campo invisível pra humano, bot que preenche tudo cai aqui -->
+<div style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
+  <label for="hpField">Não preencha este campo</label>
+  <input type="text" id="hpField" name="empresa_site" tabindex="-1" autocomplete="off">
+</div>
+
+<div class="wrap">
+
+  <!-- ============ CAPA DE ABERTURA ============ -->
+  <div class="screen active cover" id="screen-cover">
+    <h1>💄 Chega de noiva pedindo desconto: quem chega já quer o <span class="hl">pacote fechado</span></h1>
+
+    <ul class="bullets">
+      <li><span class="b-emoji">💎</span>Noiva de pacote fechado</li>
+      <li><span class="b-emoji">👑</span>Debutante, formanda, madrinha</li>
+      <li><span class="b-emoji">🔥</span>Leads que não pedem desconto</li>
+      <li><span class="b-emoji">✅</span>Agenda cheia sem indicação</li>
+    </ul>
+
+    <p class="cover-footer">→ ATENDEMOS APENAS MAQUIADORAS PROFISSIONAIS QUE JÁ ATENDEM CLIENTES. SE VOCÊ AINDA NÃO ATENDE, ESSE NÃO É O SEU MOMENTO.</p>
+
+    <button class="primary-btn" id="btn-cover-start">QUERO NOIVA QUE FECHA PACOTE →</button>
+  </div>
+
+  <!-- ============ NOME ============ -->
+  <div class="screen" id="screen-name">
+    <p class="step-label">Etapa 1 de 5</p>
+    <h1 class="light-heading">Nome e sobrenome <span class="required-mark">*</span></h1>
+    <input type="text" id="nameInput" placeholder="Seu nome completo" required>
+    <div class="error" id="nameError">Preencha seu nome completo.</div>
+    <button class="primary-btn" id="nameSubmit">Continuar</button>
+    <p class="enter-hint">pressione <kbd>Enter ↵</kbd></p>
+  </div>
+
+  <!-- ============ INSTAGRAM ============ -->
+  <div class="screen" id="screen-instagram">
+    <button type="button" class="back-btn" data-target="screen-name">← Voltar</button>
+    <p class="step-label">Etapa 2 de 5</p>
+    <h1 class="light-heading">Seu @ do Instagram <span class="required-mark">*</span></h1>
+    <input type="text" id="instagramInput" class="underline" placeholder="@seuperfil" required>
+    <div class="error" id="instagramError">Preencha seu @ do Instagram.</div>
+    <button class="primary-btn" id="instagramSubmit">Continuar</button>
+    <p class="enter-hint">pressione <kbd>Enter ↵</kbd></p>
+  </div>
+
+  <!-- ============ TELEFONE ============ -->
+  <div class="screen" id="screen-phone">
+    <button type="button" class="back-btn" data-target="screen-instagram">← Voltar</button>
+    <p class="step-label">Etapa 3 de 5</p>
+    <h1 class="light-heading">Seu número de WhatsApp <span class="required-mark">*</span></h1>
+    <div class="phone-row">
+      <button type="button" class="country-btn" id="countryBtn">
+        <span id="countryFlag">🇧🇷</span>
+        <span id="countryCode">+55</span>
+        <span class="country-chevron">▾</span>
+      </button>
+      <input type="tel" id="whatsappInput" class="underline" placeholder="(00) 00000-0000" required>
+      <div class="country-dropdown" id="countryDropdown">
+        <div class="country-search">
+          <input type="text" id="countrySearch" placeholder="🔍 Buscar país...">
+        </div>
+        <div id="countryList"></div>
+      </div>
+    </div>
+    <div class="error" id="phoneError">Preencha um número válido.</div>
+    <button class="primary-btn" id="phoneSubmit">Continuar</button>
+    <p class="enter-hint">pressione <kbd>Enter ↵</kbd></p>
+  </div>
+
+  <!-- ============ FATURAMENTO ============ -->
+  <div class="screen" id="screen-faturamento">
+    <button type="button" class="back-btn" data-target="screen-phone">← Voltar</button>
+    <p class="step-label">Etapa 4 de 5</p>
+    <h1 class="light-heading">Qual o seu faturamento hoje? <span class="required-mark">*</span></h1>
+    <div class="letter-options">
+      <button type="button" class="letter-option" data-value="mais_20k"><span class="letter-badge">A</span><span class="option-label">Mais de 20k por mês</span></button>
+      <button type="button" class="letter-option" data-value="10k_20k"><span class="letter-badge">B</span><span class="option-label">De 10k a 20k por mês</span></button>
+      <button type="button" class="letter-option" data-value="5k_10k"><span class="letter-badge">C</span><span class="option-label">De 5k a 10k por mês</span></button>
+      <button type="button" class="letter-option" data-value="ate_5k"><span class="letter-badge">D</span><span class="option-label">Até 5k por mês</span></button>
+    </div>
+  </div>
+
+  <!-- ============ INVESTIMENTO ============ -->
+  <div class="screen" id="screen-investimento">
+    <button type="button" class="back-btn" data-target="screen-faturamento">← Voltar</button>
+    <p class="step-label">Etapa 5 de 5</p>
+    <div class="rec-card">
+      <p>Recomendamos um valor de investimento diário de pelo menos <strong>R$ 35,00</strong>, o que resulta em média <strong>R$ 1.000,00 por mês</strong> em anúncios.</p>
+    </div>
+    <h1 class="light-heading">Esse valor se alinha ao seu orçamento atual? <span class="required-mark">*</span></h1>
+    <div class="letter-options">
+      <button type="button" class="letter-option" data-value="sim"><span class="letter-badge">A</span><span class="option-label">Sim! Estou pronta para levar o meu negócio para o próximo nível</span></button>
+      <button type="button" class="letter-option" data-value="nao"><span class="letter-badge">B</span><span class="option-label">Infelizmente não é o meu momento</span></button>
+    </div>
+  </div>
+
+  <!-- ============ AGENDAMENTO ============ -->
+  <!-- Uma tela só pros dois desfechos (qualificado e "não é o momento"): muda
+       só o subtítulo. Assim existe um único iframe do Calendly, que já vem
+       pré-carregado desde a etapa do telefone. -->
+  <div class="screen" id="screen-agendar">
+    <h1>Escolha a melhor data e horário ↓</h1>
+    <p class="subtitle" id="agendarSubtitulo">Parabéns pelo interesse!</p>
+    <div class="calendly-wrap">
+      <div id="calendlyBox" class="calendly-box"></div>
+      <div class="calendly-skeleton" id="calendlySkeleton">Carregando o calendário…</div>
+    </div>
+    <a class="calendly-fallback" id="btnAgendar" href="#" target="_blank" rel="noopener">Não carregou? Abrir o agendamento em outra aba ↗</a>
+  </div>
+
+  <!-- ============ OBRIGADO (NÍVEL C) ============ -->
+  <div class="screen" id="screen-thanks">
+    <h1><strong>Obrigado pelas respostas!</strong></h1>
+    <p class="subtitle">Recebemos suas informações e <strong>nossa equipe vai entrar em contato com você</strong> pelo WhatsApp que você deixou.</p>
+  </div>
+
+</div>
+
+<script>
+  // =========================================================
+  // CONFIGURAÇÃO — edite estas linhas antes de publicar
+  // =========================================================
+  const WEBHOOK_URL         = ""; // TESTE: nao cria lead no CRM
+  const WEBHOOK_TENANT_ID   = "8320459c-6a66-4b35-8e98-a237209ade7b";
+  const WEBHOOK_KEY         = "276f6f75-446f-458b-b602-42ecbc7393b9";
+  const WEBHOOK_PIPELINE_ID = "bef88278-3275-406f-b53c-a7782f527569";
+  const CALENDLY_URL        = "https://calendly.com/assessoriagreenlab/especialistas-em-mamoplastia";
+  // Classificação do lead — quem decide é a resposta do investimento:
+  //   NÍVEL C — respondeu que não é o momento de investir (qualquer
+  //             faturamento). Vai pra tela de obrigado, sem calendário.
+  //   NÍVEL A — toparia investir E fatura acima de 5k.
+  //   NÍVEL B — toparia investir, mas fatura até 5k.
+  // A e B veem o calendário; C não.
+  const FATURAMENTO_NIVEL_B = ['ate_5k'];
+
+  function nivelDoLead() {
+    if (answers.investimento !== 'sim') return 'C';
+    return FATURAMENTO_NIVEL_B.includes(answers.faturamento) ? 'B' : 'A';
+  }
+  // Notificação de WhatsApp via CallMeBot a cada lead qualificado/desqualificado.
+  const CALLMEBOT_RECIPIENTS = []; // TESTE: nao avisa o time
+  // =========================================================
+
+  const answers = {
+    nome: '', instagram: '', whatsapp: '',
+    faturamento: '', faturamentoLabel: '',
+    investimento: '', investimentoLabel: '',
+    nivel: '' // A, B ou C
+  };
+
+  const screens = ['screen-cover', 'screen-name', 'screen-instagram', 'screen-phone',
+                   'screen-faturamento', 'screen-investimento',
+                   'screen-agendar', 'screen-thanks'];
+  const totalSteps = 5; // usado só pra calcular a barra de progresso
+  let stepIndex = 0;
+
+  function showScreen(id) {
+    screens.forEach(s => document.getElementById(s).classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function updateProgress() {
+    const pct = Math.min((stepIndex / totalSteps) * 100, 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  // ---------- Eventos de dataLayer por etapa do formulário ----------
+  function pushDataLayerEvent(eventName, extra) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event: eventName }, extra || {}));
+  }
+
+  // ---------- Notificação de WhatsApp (CallMeBot) ----------
+
+
+  function sendWhatsAppNotification(nivel) {
+    const rotulo = { A: "NIVEL A - QUALIFICADO", B: "NIVEL B - QUALIFICADO", C: "NIVEL C - DESQUALIFICADO" };
+    const status = rotulo[nivel] || nivel;
+    const message = "NOVO LEAD NA AREA \nSTATUS : " + status + "\n\n" +
+      "NOME : " + (answers.nome || '') + "\n" +
+      "TELEFONE : " + (answers.whatsapp || '') + "\n" +
+      "INSTAGRAM : " + (answers.instagram || '') + "\n" +
+      "FATURAMENTO : " + (answers.faturamentoLabel || '') + "\n" +
+      "INVESTIMENTO: " + (answers.investimentoLabel || '');
+
+    CALLMEBOT_RECIPIENTS.forEach(r => {
+      const url = "https://api.callmebot.com/whatsapp.php?phone=" + encodeURIComponent(r.phone) +
+        "&text=" + encodeURIComponent(message) + "&apikey=" + encodeURIComponent(r.apikey);
+      fetch(url, { mode: 'no-cors' }).catch(err => console.error('Erro ao notificar WhatsApp:', err));
+    });
+  }
+
+  // ---------- Envio pro CRM ----------
+  // Dispara em 2 momentos: depois do telefone (cria o lead — o CRM dedupe pelo
+  // número) e no final, depois do investimento (atualiza o mesmo card).
+  let webhookQueue = Promise.resolve();
+  function sendToWebhook() {
+    webhookQueue = webhookQueue.then(() => sendToWebhookNow());
+    return webhookQueue;
+  }
+
+  async function sendToWebhookNow() {
+    if (!WEBHOOK_URL || WEBHOOK_URL === "SEU_WEBHOOK_URL_AQUI") return;
+    const hpValue = (document.getElementById('hpField') || {}).value || '';
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tenant_id: WEBHOOK_TENANT_ID,
+          webhook_key: WEBHOOK_KEY,
+          pipeline_id: WEBHOOK_PIPELINE_ID,
+          name: answers.nome,
+          phone: answers.whatsapp,
+          _hp: hpValue,
+          custom_fields: {
+            nome_e_sobrenome: answers.nome,
+            instagram: answers.instagram,
+            whatsapp: Number(answers.whatsapp) || answers.whatsapp,
+            qual_seu_faturamento_medio_mensal: answers.faturamentoLabel,
+            // Fica vazio só quando ela responde o faturamento e larga o
+            // formulário antes de responder o investimento.
+            investiria_1000_reais_em_anuncio: answers.investimentoLabel
+          }
+        })
+      });
+    } catch (err) {
+      console.error('Erro ao enviar pro webhook:', err);
+    }
+  }
+
+  // ---------- Capa ----------
+  document.getElementById('btn-cover-start').addEventListener('click', () => {
+    stepIndex = 1;
+    updateProgress();
+    pushDataLayerEvent('iniciou_formulario');
+    carregarCalendly(); // baixa o widget bem antes da tela final
+    showScreen('screen-name');
+    document.getElementById('nameInput').focus();
+  });
+
+  // ---------- Validação anti-teste/anti-curioso ----------
+  const FAKE_NAME_STEMS = [
+    'teste', 'testand', 'testar', 'testad', 'testing', 'tester',
+    'valid', 'verific', 'checand', 'checagem', 'conferind', 'conferir',
+    'exempl', 'amostr', 'sample', 'demonstr', 'rascunh', 'provand',
+    'simul', 'dummy', 'placehold', 'generic', 'padrao',
+    'lorem', 'ipsum', 'falso', 'falsa', 'mentira', 'brincadeir', 'brincand',
+    'temporari', 'xpto', 'foobar',
+    'fulano', 'ciclano', 'beltrano', 'seunome'
+  ];
+  const FAKE_NAME_EXACT = new Set([
+    'demo', 'temp', 'foo', 'bar', 'abc', 'abcd', 'abcde', 'abcdef',
+    'asdf', 'asdfg', 'asdfgh', 'qwerty', 'qwe',
+    'nao', 'naosei', 'sei', 'sla', 'oi', 'ola', 'kkk', 'kkkk',
+    'nada', 'vazio', 'embranco', 'qualquer', 'aaa', 'bbb', 'ccc',
+    'nome', 'sobrenome', 'xxxx', 'yyyy', 'zzzz'
+  ]);
+
+  function isRepeatedDigits(s) {
+    return /^(\d)\1+$/.test(s);
+  }
+
+  function isSequentialDigits(s) {
+    let asc = true, desc = true;
+    for (let i = 1; i < s.length; i++) {
+      if (+s[i] !== +s[i - 1] + 1) asc = false;
+      if (+s[i] !== +s[i - 1] - 1) desc = false;
+    }
+    return asc || desc;
+  }
+
+  function isFakeName(rawName) {
+    const norm = normalizeText(rawName.trim());
+    if (!norm) return true;
+    const compact = norm.replace(/\s+/g, '');
+    if (compact.length < 4) return true;
+    if (!/[a-z]/.test(compact)) return true;
+    if (/^(.)\1+$/.test(compact)) return true;
+    const words = norm.split(/\s+/).filter(Boolean);
+    if (words.length < 2) return true; // exige nome + sobrenome
+    const strippedWords = words.map((w) => w.replace(/[0-9]+$/, ''));
+    if (strippedWords.some((w) => FAKE_NAME_EXACT.has(w))) return true;
+    if (strippedWords.some((w) => FAKE_NAME_STEMS.some((stem) => w.includes(stem)))) return true;
+    return false;
+  }
+
+  const VALID_BR_DDDS = new Set([
+    11, 12, 13, 14, 15, 16, 17, 18, 19,
+    21, 22, 24, 27, 28,
+    31, 32, 33, 34, 35, 37, 38,
+    41, 42, 43, 44, 45, 46, 47, 48, 49,
+    51, 53, 54, 55,
+    61, 62, 63, 64, 65, 66, 67, 68, 69,
+    71, 73, 74, 75, 77, 79,
+    81, 82, 83, 84, 85, 86, 87, 88, 89,
+    91, 92, 93, 94, 95, 96, 97, 98, 99
+  ]);
+
+  function isFakePhone(digits, isBrazil) {
+    if (digits.length < 8) return true;
+    if (isRepeatedDigits(digits)) return true;
+    if (digits.length >= 6 && isSequentialDigits(digits)) return true;
+    if (isBrazil) {
+      if (digits.length !== 10 && digits.length !== 11) return true;
+      const ddd = Number(digits.slice(0, 2));
+      if (!VALID_BR_DDDS.has(ddd)) return true;
+      const local = digits.slice(2);
+      if (isRepeatedDigits(local)) return true;
+      if (digits.length === 11 && local[0] !== '9') return true;
+      const localCore = digits.length === 11 ? local.slice(1) : local;
+      if (localCore.length >= 5 && (isRepeatedDigits(localCore) || isSequentialDigits(localCore))) return true;
+    }
+    return false;
+  }
+
+  // ---------- Nome ----------
+  document.getElementById('nameSubmit').addEventListener('click', submitName);
+  document.getElementById('nameInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') submitName();
+  });
+
+  function submitName() {
+    const nameInput = document.getElementById('nameInput');
+    const errorEl = document.getElementById('nameError');
+    const value = nameInput.value.trim();
+
+    if (isFakeName(value)) {
+      errorEl.textContent = 'Preencha seu nome e sobrenome de verdade — vamos usar isso na nossa conversa.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    errorEl.style.display = 'none';
+    answers.nome = value;
+    stepIndex = 2;
+    updateProgress();
+    pushDataLayerEvent('colocou_nome');
+    showScreen('screen-instagram');
+    document.getElementById('instagramInput').focus();
+  }
+
+  // ---------- Instagram ----------
+  document.getElementById('instagramSubmit').addEventListener('click', submitInstagram);
+  document.getElementById('instagramInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') submitInstagram();
+  });
+
+  function submitInstagram() {
+    const instagramInput = document.getElementById('instagramInput');
+    const errorEl = document.getElementById('instagramError');
+    const handle = instagramInput.value.trim().replace(/^@+/, '').replace(/\s+/g, '');
+
+    if (handle.length < 2) {
+      errorEl.textContent = 'Preencha seu @ do Instagram.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    errorEl.style.display = 'none';
+    answers.instagram = '@' + handle;
+    stepIndex = 3;
+    updateProgress();
+    pushDataLayerEvent('colocou_instagram');
+    showScreen('screen-phone');
+    document.getElementById('whatsappInput').focus();
+  }
+
+  // ---------- Telefone: seletor de país ----------
+  const countries = [
+    {iso:'BR', name:'Brasil', code:'+55'},
+    {iso:'PT', name:'Portugal', code:'+351'},
+    {iso:'US', name:'Estados Unidos', code:'+1'},
+    {iso:'AR', name:'Argentina', code:'+54'},
+    {iso:'PY', name:'Paraguai', code:'+595'},
+    {iso:'UY', name:'Uruguai', code:'+598'},
+    {iso:'CL', name:'Chile', code:'+56'},
+    {iso:'BO', name:'Bolívia', code:'+591'},
+    {iso:'CO', name:'Colômbia', code:'+57'},
+    {iso:'PE', name:'Peru', code:'+51'},
+    {iso:'VE', name:'Venezuela', code:'+58'},
+    {iso:'EC', name:'Equador', code:'+593'},
+    {iso:'GY', name:'Guiana', code:'+592'},
+    {iso:'SR', name:'Suriname', code:'+597'},
+    {iso:'MX', name:'México', code:'+52'},
+    {iso:'CA', name:'Canadá', code:'+1'},
+    {iso:'GT', name:'Guatemala', code:'+502'},
+    {iso:'BZ', name:'Belize', code:'+501'},
+    {iso:'SV', name:'El Salvador', code:'+503'},
+    {iso:'HN', name:'Honduras', code:'+504'},
+    {iso:'NI', name:'Nicarágua', code:'+505'},
+    {iso:'CR', name:'Costa Rica', code:'+506'},
+    {iso:'PA', name:'Panamá', code:'+507'},
+    {iso:'CU', name:'Cuba', code:'+53'},
+    {iso:'JM', name:'Jamaica', code:'+1'},
+    {iso:'HT', name:'Haiti', code:'+509'},
+    {iso:'DO', name:'República Dominicana', code:'+1'},
+    {iso:'BS', name:'Bahamas', code:'+1'},
+    {iso:'BB', name:'Barbados', code:'+1'},
+    {iso:'TT', name:'Trinidad e Tobago', code:'+1'},
+    {iso:'GD', name:'Granada', code:'+1'},
+    {iso:'VC', name:'São Vicente e Granadinas', code:'+1'},
+    {iso:'LC', name:'Santa Lúcia', code:'+1'},
+    {iso:'DM', name:'Dominica', code:'+1'},
+    {iso:'KN', name:'São Cristóvão e Névis', code:'+1'},
+    {iso:'AG', name:'Antígua e Barbuda', code:'+1'},
+    {iso:'ES', name:'Espanha', code:'+34'},
+    {iso:'FR', name:'França', code:'+33'},
+    {iso:'DE', name:'Alemanha', code:'+49'},
+    {iso:'IT', name:'Itália', code:'+39'},
+    {iso:'GB', name:'Reino Unido', code:'+44'},
+    {iso:'IE', name:'Irlanda', code:'+353'},
+    {iso:'NL', name:'Países Baixos', code:'+31'},
+    {iso:'BE', name:'Bélgica', code:'+32'},
+    {iso:'CH', name:'Suíça', code:'+41'},
+    {iso:'AT', name:'Áustria', code:'+43'},
+    {iso:'SE', name:'Suécia', code:'+46'},
+    {iso:'NO', name:'Noruega', code:'+47'},
+    {iso:'DK', name:'Dinamarca', code:'+45'},
+    {iso:'FI', name:'Finlândia', code:'+358'},
+    {iso:'IS', name:'Islândia', code:'+354'},
+    {iso:'PL', name:'Polônia', code:'+48'},
+    {iso:'CZ', name:'República Tcheca', code:'+420'},
+    {iso:'SK', name:'Eslováquia', code:'+421'},
+    {iso:'HU', name:'Hungria', code:'+36'},
+    {iso:'RO', name:'Romênia', code:'+40'},
+    {iso:'BG', name:'Bulgária', code:'+359'},
+    {iso:'GR', name:'Grécia', code:'+30'},
+    {iso:'HR', name:'Croácia', code:'+385'},
+    {iso:'SI', name:'Eslovênia', code:'+386'},
+    {iso:'RS', name:'Sérvia', code:'+381'},
+    {iso:'BA', name:'Bósnia e Herzegovina', code:'+387'},
+    {iso:'ME', name:'Montenegro', code:'+382'},
+    {iso:'MK', name:'Macedônia do Norte', code:'+389'},
+    {iso:'AL', name:'Albânia', code:'+355'},
+    {iso:'XK', name:'Kosovo', code:'+383'},
+    {iso:'UA', name:'Ucrânia', code:'+380'},
+    {iso:'BY', name:'Bielorrússia', code:'+375'},
+    {iso:'MD', name:'Moldávia', code:'+373'},
+    {iso:'LT', name:'Lituânia', code:'+370'},
+    {iso:'LV', name:'Letônia', code:'+371'},
+    {iso:'EE', name:'Estônia', code:'+372'},
+    {iso:'RU', name:'Rússia', code:'+7'},
+    {iso:'LU', name:'Luxemburgo', code:'+352'},
+    {iso:'MT', name:'Malta', code:'+356'},
+    {iso:'CY', name:'Chipre', code:'+357'},
+    {iso:'MC', name:'Mônaco', code:'+377'},
+    {iso:'AD', name:'Andorra', code:'+376'},
+    {iso:'LI', name:'Liechtenstein', code:'+423'},
+    {iso:'SM', name:'San Marino', code:'+378'},
+    {iso:'VA', name:'Vaticano', code:'+379'},
+    {iso:'ZA', name:'África do Sul', code:'+27'},
+    {iso:'DZ', name:'Argélia', code:'+213'},
+    {iso:'AO', name:'Angola', code:'+244'},
+    {iso:'BJ', name:'Benin', code:'+229'},
+    {iso:'BW', name:'Botsuana', code:'+267'},
+    {iso:'BF', name:'Burkina Faso', code:'+226'},
+    {iso:'BI', name:'Burundi', code:'+257'},
+    {iso:'CV', name:'Cabo Verde', code:'+238'},
+    {iso:'CM', name:'Camarões', code:'+237'},
+    {iso:'TD', name:'Chade', code:'+235'},
+    {iso:'KM', name:'Comores', code:'+269'},
+    {iso:'CG', name:'Congo', code:'+242'},
+    {iso:'CD', name:'Congo (RD)', code:'+243'},
+    {iso:'CI', name:'Costa do Marfim', code:'+225'},
+    {iso:'DJ', name:'Djibuti', code:'+253'},
+    {iso:'EG', name:'Egito', code:'+20'},
+    {iso:'ER', name:'Eritreia', code:'+291'},
+    {iso:'SZ', name:'Essuatíni', code:'+268'},
+    {iso:'ET', name:'Etiópia', code:'+251'},
+    {iso:'GA', name:'Gabão', code:'+241'},
+    {iso:'GM', name:'Gâmbia', code:'+220'},
+    {iso:'GH', name:'Gana', code:'+233'},
+    {iso:'GN', name:'Guiné', code:'+224'},
+    {iso:'GW', name:'Guiné-Bissau', code:'+245'},
+    {iso:'GQ', name:'Guiné Equatorial', code:'+240'},
+    {iso:'LS', name:'Lesoto', code:'+266'},
+    {iso:'LR', name:'Libéria', code:'+231'},
+    {iso:'LY', name:'Líbia', code:'+218'},
+    {iso:'MG', name:'Madagascar', code:'+261'},
+    {iso:'MW', name:'Malawi', code:'+265'},
+    {iso:'ML', name:'Mali', code:'+223'},
+    {iso:'MA', name:'Marrocos', code:'+212'},
+    {iso:'MU', name:'Maurícia', code:'+230'},
+    {iso:'MR', name:'Mauritânia', code:'+222'},
+    {iso:'MZ', name:'Moçambique', code:'+258'},
+    {iso:'NA', name:'Namíbia', code:'+264'},
+    {iso:'NE', name:'Níger', code:'+227'},
+    {iso:'NG', name:'Nigéria', code:'+234'},
+    {iso:'KE', name:'Quênia', code:'+254'},
+    {iso:'RW', name:'Ruanda', code:'+250'},
+    {iso:'SL', name:'Serra Leoa', code:'+232'},
+    {iso:'SN', name:'Senegal', code:'+221'},
+    {iso:'SC', name:'Seicheles', code:'+248'},
+    {iso:'SO', name:'Somália', code:'+252'},
+    {iso:'SD', name:'Sudão', code:'+249'},
+    {iso:'SS', name:'Sudão do Sul', code:'+211'},
+    {iso:'TZ', name:'Tanzânia', code:'+255'},
+    {iso:'TG', name:'Togo', code:'+228'},
+    {iso:'TN', name:'Tunísia', code:'+216'},
+    {iso:'UG', name:'Uganda', code:'+256'},
+    {iso:'ZM', name:'Zâmbia', code:'+260'},
+    {iso:'ZW', name:'Zimbábue', code:'+263'},
+    {iso:'CN', name:'China', code:'+86'},
+    {iso:'JP', name:'Japão', code:'+81'},
+    {iso:'KR', name:'Coreia do Sul', code:'+82'},
+    {iso:'KP', name:'Coreia do Norte', code:'+850'},
+    {iso:'IN', name:'Índia', code:'+91'},
+    {iso:'PK', name:'Paquistão', code:'+92'},
+    {iso:'BD', name:'Bangladesh', code:'+880'},
+    {iso:'LK', name:'Sri Lanka', code:'+94'},
+    {iso:'NP', name:'Nepal', code:'+977'},
+    {iso:'BT', name:'Butão', code:'+975'},
+    {iso:'MM', name:'Mianmar', code:'+95'},
+    {iso:'TH', name:'Tailândia', code:'+66'},
+    {iso:'VN', name:'Vietnã', code:'+84'},
+    {iso:'LA', name:'Laos', code:'+856'},
+    {iso:'KH', name:'Camboja', code:'+855'},
+    {iso:'MY', name:'Malásia', code:'+60'},
+    {iso:'SG', name:'Singapura', code:'+65'},
+    {iso:'ID', name:'Indonésia', code:'+62'},
+    {iso:'PH', name:'Filipinas', code:'+63'},
+    {iso:'BN', name:'Brunei', code:'+673'},
+    {iso:'TL', name:'Timor-Leste', code:'+670'},
+    {iso:'MN', name:'Mongólia', code:'+976'},
+    {iso:'KZ', name:'Cazaquistão', code:'+7'},
+    {iso:'UZ', name:'Uzbequistão', code:'+998'},
+    {iso:'TM', name:'Turcomenistão', code:'+993'},
+    {iso:'TJ', name:'Tajiquistão', code:'+992'},
+    {iso:'KG', name:'Quirguistão', code:'+996'},
+    {iso:'AF', name:'Afeganistão', code:'+93'},
+    {iso:'IR', name:'Irã', code:'+98'},
+    {iso:'IQ', name:'Iraque', code:'+964'},
+    {iso:'SY', name:'Síria', code:'+963'},
+    {iso:'LB', name:'Líbano', code:'+961'},
+    {iso:'JO', name:'Jordânia', code:'+962'},
+    {iso:'IL', name:'Israel', code:'+972'},
+    {iso:'PS', name:'Palestina', code:'+970'},
+    {iso:'SA', name:'Arábia Saudita', code:'+966'},
+    {iso:'YE', name:'Iêmen', code:'+967'},
+    {iso:'OM', name:'Omã', code:'+968'},
+    {iso:'AE', name:'Emirados Árabes Unidos', code:'+971'},
+    {iso:'QA', name:'Catar', code:'+974'},
+    {iso:'BH', name:'Bahrein', code:'+973'},
+    {iso:'KW', name:'Kuwait', code:'+965'},
+    {iso:'TR', name:'Turquia', code:'+90'},
+    {iso:'GE', name:'Geórgia', code:'+995'},
+    {iso:'AM', name:'Armênia', code:'+374'},
+    {iso:'AZ', name:'Azerbaijão', code:'+994'},
+    {iso:'TW', name:'Taiwan', code:'+886'},
+    {iso:'HK', name:'Hong Kong', code:'+852'},
+    {iso:'MO', name:'Macau', code:'+853'},
+    {iso:'AU', name:'Austrália', code:'+61'},
+    {iso:'NZ', name:'Nova Zelândia', code:'+64'},
+    {iso:'PG', name:'Papua-Nova Guiné', code:'+675'},
+    {iso:'FJ', name:'Fiji', code:'+679'},
+    {iso:'SB', name:'Ilhas Salomão', code:'+677'},
+    {iso:'VU', name:'Vanuatu', code:'+678'},
+    {iso:'WS', name:'Samoa', code:'+685'},
+    {iso:'TO', name:'Tonga', code:'+676'},
+    {iso:'KI', name:'Kiribati', code:'+686'},
+    {iso:'PW', name:'Palau', code:'+680'},
+    {iso:'FM', name:'Micronésia', code:'+691'},
+    {iso:'MH', name:'Ilhas Marshall', code:'+692'},
+    {iso:'NR', name:'Nauru', code:'+674'},
+    {iso:'TV', name:'Tuvalu', code:'+688'}
+  ];
+  let selectedCountry = countries[0];
+
+  function flagEmoji(iso2) {
+    return String.fromCodePoint(...[...iso2.toUpperCase()].map(ch => 127397 + ch.charCodeAt(0)));
+  }
+
+  function normalizeText(str) {
+    return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  }
+
+  function renderCountryList(filter) {
+    const list = document.getElementById('countryList');
+    const q = normalizeText((filter || '').trim());
+    const filtered = countries.filter(c => normalizeText(c.name).includes(q) || c.code.includes(q));
+    list.innerHTML = filtered.map(c => `
+      <button type="button" class="country-option" data-iso="${c.iso}">
+        <span><span class="cflag">${flagEmoji(c.iso)}</span>${c.name}</span>
+        <span class="ccode">${c.code}</span>
+      </button>
+    `).join('');
+    list.querySelectorAll('.country-option').forEach(btn => {
+      btn.addEventListener('click', () => selectCountry(btn.dataset.iso));
+    });
+  }
+
+  function selectCountry(iso) {
+    const c = countries.find(x => x.iso === iso);
+    if (!c) return;
+    selectedCountry = c;
+    document.getElementById('countryFlag').textContent = flagEmoji(c.iso);
+    document.getElementById('countryCode').textContent = c.code;
+    closeDropdown();
+    document.getElementById('whatsappInput').focus();
+  }
+
+  function openDropdown() {
+    document.getElementById('countryDropdown').classList.add('open');
+    document.getElementById('countrySearch').value = '';
+    renderCountryList('');
+    document.getElementById('countrySearch').focus();
+  }
+
+  function closeDropdown() {
+    document.getElementById('countryDropdown').classList.remove('open');
+  }
+
+  document.getElementById('countryBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.getElementById('countryDropdown').classList.contains('open') ? closeDropdown() : openDropdown();
+  });
+  document.getElementById('countrySearch').addEventListener('input', (e) => {
+    renderCountryList(e.target.value);
+  });
+  document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('countryDropdown');
+    if (!dropdown.contains(e.target) && e.target.id !== 'countryBtn') closeDropdown();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeDropdown();
+  });
+
+  // ---------- Telefone ----------
+  document.getElementById('phoneSubmit').addEventListener('click', submitPhone);
+  document.getElementById('whatsappInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') submitPhone();
+  });
+
+  function submitPhone() {
+    const phoneInput = document.getElementById('whatsappInput');
+    const errorEl = document.getElementById('phoneError');
+    const digits = phoneInput.value.replace(/\D/g, '');
+    const isBrazil = selectedCountry.iso === 'BR';
+
+    if (isFakePhone(digits, isBrazil)) {
+      errorEl.textContent = isBrazil
+        ? 'Digite um WhatsApp válido, com DDD (ex: 11 96234-8517).'
+        : 'Digite um número de WhatsApp válido.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    errorEl.style.display = 'none';
+    answers.whatsapp = selectedCountry.code.replace('+', '') + digits;
+    stepIndex = 4;
+    updateProgress();
+    pushDataLayerEvent('colocou_telefone');
+    // Primeiro envio: cria o lead no CRM com nome, instagram e telefone
+    sendToWebhook();
+    showScreen('screen-faturamento');
+  }
+
+  // ---------- Pergunta: Faturamento ----------
+  document.querySelectorAll('#screen-faturamento .letter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      answers.faturamento = btn.dataset.value;
+      answers.faturamentoLabel = btn.querySelector('.option-label').textContent;
+      stepIndex = 5;
+      updateProgress();
+      pushDataLayerEvent('colocou_faturamento', { faturamento: answers.faturamento });
+
+      // Atualiza o CRM já com a faixa de faturamento: se ela largar o
+      // formulário na pergunta do investimento, o card não fica sem essa
+      // resposta.
+      sendToWebhook();
+
+      showScreen('screen-investimento');
+    });
+  });
+
+  // ---------- Pergunta: Investimento (última etapa) ----------
+  // href do fallback é definido na hora do clique, já com os dados do lead
+
+  document.querySelectorAll('#screen-investimento .letter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      answers.investimento = btn.dataset.value;
+      answers.investimentoLabel = btn.querySelector('.option-label').textContent;
+      pushDataLayerEvent('colocou_investimento', { investimento: answers.investimento });
+      fecharLead(nivelDoLead());
+    });
+  });
+
+  // ---------- Fecha o lead: classifica, avisa todo mundo e mostra a tela final ----------
+  async function fecharLead(nivel) {
+    answers.nivel = nivel;
+    stepIndex = 5;
+    updateProgress();
+
+    // Um evento por nível (acionador direto no GTM) + um genérico com o nível
+    // como parâmetro, pra quem preferir resolver com uma tag só.
+    const dados = {
+      nivel: nivel,
+      faturamento: answers.faturamento,
+      investimento: answers.investimento || null
+    };
+    pushDataLayerEvent('lead_nivel_' + nivel.toLowerCase(), dados);
+    pushDataLayerEvent('lead_classificado', dados);
+
+    // Atualiza o card no CRM com as respostas finais
+    await sendToWebhook();
+
+    // Notifica o WhatsApp do time sobre o novo lead
+    sendWhatsAppNotification(nivel);
+
+    if (nivel === 'C') {
+      showScreen('screen-thanks');
+      return;
+    }
+    mostrarAgendamento('Parabéns pelo interesse!');
+  }
+
+  // ---------- Calendly embutido ----------
+  // Estratégia de velocidade:
+  //   1. preconnect no <head> — DNS + TLS já resolvidos;
+  //   2. script do widget baixado assim que a pessoa clica no CTA da capa.
+  // Quando a tela final aparece só falta o documento do Calendly (~0,6s).
+  // Montar o iframe antes da hora não adianta: o navegador não renderiza
+  // iframe fora da tela, e o Calendly aparece em branco quando é revelado —
+  // testado, não use. Enquanto carrega, o esqueleto abaixo segura a tela.
+  let calendlyScript = null;
+  function carregarCalendly() {
+    if (!calendlyScript) {
+      calendlyScript = new Promise((resolve, reject) => {
+        const tag = document.createElement('script');
+        tag.src = 'https://assets.calendly.com/assets/external/widget.js';
+        tag.async = true;
+        tag.onload = resolve;
+        tag.onerror = reject;
+        document.head.appendChild(tag);
+      });
+    }
+    return calendlyScript;
+  }
+
+  // Monta a URL do Calendly já com os dados do lead. O objeto `prefill` do
+  // widget não chega no iframe — quem preenche de verdade é a query string
+  // (name = nome; a1 = 1ª pergunta personalizada do evento, o WhatsApp).
+  // primary_color deixa o Calendly na cor do formulário.
+  function urlCalendly() {
+    const params = new URLSearchParams({
+      hide_gdpr_banner: '1',
+      primary_color: '8E4A63',
+      name: answers.nome,
+      a1: '+' + answers.whatsapp
+    });
+    return CALENDLY_URL + (CALENDLY_URL.includes('?') ? '&' : '?') + params.toString();
+  }
+
+  // O "carregando" sai quando o Calendly avisa que pintou a tela dele — o
+  // evento `load` do iframe não serve: dispara antes da interface aparecer
+  // (medido: ~1s de diferença). O timeout de 8s é só rede de segurança.
+  function esconderEsqueleto() {
+    document.getElementById('calendlySkeleton').classList.add('fim');
+  }
+
+  // Se em 12s o Calendly não deu sinal de vida (rede, adblock, embed bloqueado),
+  // o esqueleto vira um caminho de saída: agendar em outra aba. Melhor do que
+  // deixar a pessoa olhando pra um retângulo vazio.
+  function esqueletoVirouSaida() {
+    const esqueleto = document.getElementById('calendlySkeleton');
+    if (esqueleto.classList.contains('fim')) return; // o calendário apareceu
+    esqueleto.classList.add('erro');
+    esqueleto.textContent = '';
+
+    const aviso = document.createElement('p');
+    aviso.style.margin = '0';
+    aviso.textContent = 'O calendário não abriu aqui. Sem problema — dá pra agendar na página do Calendly.';
+
+    const botao = document.createElement('a');
+    botao.className = 'primary-btn';
+    botao.href = urlCalendly();
+    botao.target = '_blank';
+    botao.rel = 'noopener';
+    botao.textContent = 'AGENDAR EM OUTRA ABA \u2197';
+    botao.addEventListener('click', () => {
+      pushDataLayerEvent('clicou_agendar', { nivel: answers.nivel });
+    });
+
+    esqueleto.appendChild(aviso);
+    esqueleto.appendChild(botao);
+  }
+
+  function montarCalendly() {
+    const box = document.getElementById('calendlyBox');
+    if (box.dataset.pronto === '1') return;
+    box.dataset.pronto = '1';
+    carregarCalendly().then(() => {
+      window.Calendly.initInlineWidget({
+        url: urlCalendly(),
+        parentElement: box,
+        prefill: {
+          name: answers.nome,
+          customAnswers: { a1: '+' + answers.whatsapp }
+        }
+      });
+      setTimeout(esqueletoVirouSaida, 12000);
+    }).catch(() => {
+      // bloqueado (adblock/rede): sobra o link de abrir em outra aba
+      box.dataset.pronto = '';
+      console.warn('Calendly não carregou — usando o link externo.');
+    });
+  }
+
+  function mostrarAgendamento(subtitulo) {
+    document.getElementById('agendarSubtitulo').textContent = subtitulo;
+    document.body.classList.add('tela-agendamento');
+    showScreen('screen-agendar');
+    montarCalendly();
+  }
+
+  let calendarioVisto = false;
+  // O Calendly avisa por postMessage quando a reunião é marcada de verdade.
+  window.addEventListener('message', (e) => {
+    if (typeof e.origin !== 'string' || !/^https:\/\/([a-z0-9-]+\.)*calendly\.com$/.test(e.origin)) return;
+    const evento = e.data && e.data.event;
+    if (typeof evento !== 'string' || evento.indexOf('calendly.') !== 0) return;
+
+    // qualquer aviso do Calendly já significa que a interface dele apareceu
+    esconderEsqueleto();
+
+    // Evento de "viu o calendário" — dispara uma vez só, e só quando o
+    // calendário está de fato na tela (não quando a tela final aparece).
+    if (!calendarioVisto) {
+      calendarioVisto = true;
+      pushDataLayerEvent('visualizou_calendario', { nivel: answers.nivel });
+    }
+
+    if (evento !== 'calendly.event_scheduled') return;
+    pushDataLayerEvent('agendou_reuniao', { nivel: answers.nivel });
+  });
+
+  // ---------- Clique no link de agendar (fallback) ----------
+  document.getElementById('btnAgendar').addEventListener('click', (e) => {
+    e.currentTarget.href = urlCalendly();
+    pushDataLayerEvent('clicou_agendar', { nivel: answers.nivel });
+  });
+
+  // ---------- Botão Voltar ----------
+  const stepIndexByScreen = {
+    'screen-name': 1, 'screen-instagram': 2, 'screen-phone': 3,
+    'screen-faturamento': 4, 'screen-investimento': 5
+  };
+  document.querySelectorAll('.back-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      if (stepIndexByScreen[target]) {
+        stepIndex = stepIndexByScreen[target];
+        updateProgress();
+      }
+      showScreen(target);
+    });
+  });
+
+  updateProgress();
+</script>
+
+</body>
+</html>

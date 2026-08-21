@@ -1,0 +1,263 @@
+<title>Capas Maquiadoras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ground: #FCFAFB;
+    --sheet: #FFFFFF;
+    --ink: #2B2126;
+    --muted: #6B5560;
+    --faint: #8C7480;
+    --line: #EDDDE3;
+    --accent: #8E4A63;
+    --accent-soft: #FAEBF0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #1A1418;
+      --sheet: #221A1E;
+      --ink: #F3EAEE;
+      --muted: #B9A7AF;
+      --faint: #93818A;
+      --line: #372B31;
+      --accent: #D98BA8;
+      --accent-soft: #3A2830;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #1A1418;
+    --sheet: #221A1E;
+    --ink: #F3EAEE;
+    --muted: #B9A7AF;
+    --faint: #93818A;
+    --line: #372B31;
+    --accent: #D98BA8;
+    --accent-soft: #3A2830;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 20px 72px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .folha { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+
+  .topo { display: flex; flex-direction: column; gap: 10px; }
+  .topo .eyebrow {
+    font-size: 11px; font-weight: 900; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .topo h1 { margin: 0; font-size: 30px; font-weight: 900; letter-spacing: -.02em; text-wrap: balance; }
+  .topo p { margin: 0; max-width: 62ch; color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+  .versao {
+    background: var(--sheet);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  @media (max-width: 760px) { .versao { grid-template-columns: 1fr; } }
+
+  .rotulo { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .rotulo .num {
+    font-size: 11px; font-weight: 900; letter-spacing: .1em;
+    color: #fff; background: var(--accent);
+    border-radius: 6px; padding: 3px 8px;
+  }
+  .rotulo .angulo { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .01em; }
+
+  /* ---- mockup fiel da capa: sempre claro, é o produto ---- */
+  .capa {
+    width: 100%;
+    background: #fff;
+    color: #2B2126;
+    border: 1px solid #EDDDE3;
+    border-radius: 12px;
+    padding: 24px 20px;
+    overflow-x: auto;
+  }
+  .capa h2 {
+    font-size: 25px; font-weight: 900; line-height: 1.32;
+    letter-spacing: -.015em; margin: 0 0 20px; text-wrap: balance;
+  }
+  .capa h2 .hl {
+    display: inline-block; white-space: nowrap;
+    color: #85455C; background: #FAEBF0;
+    border-radius: 5px; padding: 0 8px;
+  }
+  .capa ul { list-style: none; padding: 0; margin: 0 0 22px; }
+  .capa li { white-space: nowrap; font-size: 16px; line-height: 1.75; }
+  .capa li .e { margin-right: 10px; }
+  .capa .cta {
+    display: block; width: 100%; padding: 16px;
+    background: #8E4A63; color: #fff; border: none; border-radius: 10px;
+    white-space: nowrap; font-size: 15px; font-weight: 800;
+    font-family: inherit; letter-spacing: .02em; text-align: center;
+  }
+
+  /* ---- coluna de contagem ---- */
+  .contagem { display: flex; flex-direction: column; gap: 0; }
+  .contagem .cab {
+    font-size: 10px; font-weight: 900; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint);
+    padding-bottom: 8px; border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between;
+  }
+  .contagem .linha {
+    display: flex; justify-content: space-between; align-items: center; gap: 14px;
+    padding: 11px 0; border-bottom: 1px solid var(--line);
+    font-size: 14px; color: var(--ink);
+  }
+  .contagem .linha:last-child { border-bottom: none; }
+  .contagem .n {
+    font-variant-numeric: tabular-nums;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    background: var(--accent-soft); border-radius: 999px; padding: 3px 9px;
+    flex-shrink: 0;
+  }
+  .contagem .head-line { color: var(--muted); font-style: italic; }
+</style>
+
+<div class="folha">
+
+  <div class="topo">
+    <span class="eyebrow">GreenHub · tráfego pago para maquiadoras</span>
+    <h1>Cinco capas, cinco ângulos</h1>
+    <p>Cada versão ataca uma dor diferente da maquiadora. Os bullets estão renderizados na capa real do formulário — a mesma fonte, a mesma tarja, o mesmo <code>nowrap</code>. A contagem ao lado é só do texto, sem o emoji.</p>
+  </div>
+
+  <!-- V1 -->
+  <div class="versao">
+    <div>
+      <div class="rotulo"><span class="num">01</span><span class="angulo">Temporada de casamentos</span></div>
+      <div class="capa">
+        <h2>💄 Sua <span class="hl">agenda de noiva</span> cheia, da prova ao <span class="hl">sábado do casamento</span></h2>
+        <ul>
+          <li><span class="e">💍</span>Noivas que fecham na prova</li>
+          <li><span class="e">🔥</span>Leads quentes e qualificados</li>
+          <li><span class="e">📅</span>Sábados lotados o ano todo</li>
+          <li><span class="e">✅</span>Pacote noiva + madrinhas</li>
+        </ul>
+        <div class="cta">QUERO MINHA AGENDA CHEIA →</div>
+      </div>
+    </div>
+    <div class="contagem">
+      <div class="cab"><span>texto</span><span>caracteres</span></div>
+      <div class="linha head-line"><span>Sua agenda de noiva cheia, da prova ao sábado do casamento</span><span class="n">58</span></div>
+      <div class="linha"><span>Noivas que fecham na prova</span><span class="n">26</span></div>
+      <div class="linha"><span>Leads quentes e qualificados</span><span class="n">28</span></div>
+      <div class="linha"><span>Sábados lotados o ano todo</span><span class="n">26</span></div>
+      <div class="linha"><span>Pacote noiva + madrinhas</span><span class="n">24</span></div>
+    </div>
+  </div>
+
+  <!-- V2 -->
+  <div class="versao">
+    <div>
+      <div class="rotulo"><span class="num">02</span><span class="angulo">Ticket alto, sem desconto</span></div>
+      <div class="capa">
+        <h2>💄 Chega de noiva pedindo desconto: quem chega já quer o <span class="hl">pacote fechado</span></h2>
+        <ul>
+          <li><span class="e">💎</span>Noiva de pacote fechado</li>
+          <li><span class="e">🔥</span>Leads que não pedem desconto</li>
+          <li><span class="e">📈</span>Mais prova, mais contrato</li>
+          <li><span class="e">✅</span>Agenda cheia sem indicação</li>
+        </ul>
+        <div class="cta">QUERO NOIVA QUE FECHA PACOTE →</div>
+      </div>
+    </div>
+    <div class="contagem">
+      <div class="cab"><span>texto</span><span>caracteres</span></div>
+      <div class="linha head-line"><span>Chega de noiva pedindo desconto: quem chega já quer o pacote fechado</span><span class="n">68</span></div>
+      <div class="linha"><span>Noiva de pacote fechado</span><span class="n">23</span></div>
+      <div class="linha"><span>Leads que não pedem desconto</span><span class="n">28</span></div>
+      <div class="linha"><span>Mais prova, mais contrato</span><span class="n">25</span></div>
+      <div class="linha"><span>Agenda cheia sem indicação</span><span class="n">26</span></div>
+    </div>
+  </div>
+
+  <!-- V3 -->
+  <div class="versao">
+    <div>
+      <div class="rotulo"><span class="num">03</span><span class="angulo">Região e deslocamento</span></div>
+      <div class="capa">
+        <h2>💄 <span class="hl">Noivas da sua cidade</span> te achando primeiro, sem rodar o estado inteiro</h2>
+        <ul>
+          <li><span class="e">📍</span>Anúncio só na sua cidade</li>
+          <li><span class="e">💍</span>Noiva perto do seu estúdio</li>
+          <li><span class="e">🚗</span>Menos estrada, mais cadeira</li>
+          <li><span class="e">✅</span>Agenda fechada com 3 meses</li>
+        </ul>
+        <div class="cta">QUERO NOIVA DA MINHA CIDADE →</div>
+      </div>
+    </div>
+    <div class="contagem">
+      <div class="cab"><span>texto</span><span>caracteres</span></div>
+      <div class="linha head-line"><span>Noivas da sua cidade te achando primeiro, sem rodar o estado inteiro</span><span class="n">68</span></div>
+      <div class="linha"><span>Anúncio só na sua cidade</span><span class="n">24</span></div>
+      <div class="linha"><span>Noiva perto do seu estúdio</span><span class="n">26</span></div>
+      <div class="linha"><span>Menos estrada, mais cadeira</span><span class="n">27</span></div>
+      <div class="linha"><span>Agenda fechada com 3 meses</span><span class="n">26</span></div>
+    </div>
+  </div>
+
+  <!-- V4 -->
+  <div class="versao">
+    <div>
+      <div class="rotulo"><span class="num">04</span><span class="angulo">Social: 15 anos, formatura, madrinha</span></div>
+      <div class="capa">
+        <h2>💄 Não é só noiva: debutante, formanda e madrinha enchendo <span class="hl">a semana toda</span></h2>
+        <ul>
+          <li><span class="e">👑</span>Debutante, formanda, madrinha</li>
+          <li><span class="e">🔥</span>Leads quentes no WhatsApp</li>
+          <li><span class="e">📆</span>Movimento de segunda a sexta</li>
+          <li><span class="e">✅</span>Day use que vira cliente fixa</li>
+        </ul>
+        <div class="cta">QUERO ENCHER A SEMANA TODA →</div>
+      </div>
+    </div>
+    <div class="contagem">
+      <div class="cab"><span>texto</span><span>caracteres</span></div>
+      <div class="linha head-line"><span>Não é só noiva: debutante, formanda e madrinha enchendo a semana toda</span><span class="n">69</span></div>
+      <div class="linha"><span>Debutante, formanda, madrinha</span><span class="n">29</span></div>
+      <div class="linha"><span>Leads quentes no WhatsApp</span><span class="n">25</span></div>
+      <div class="linha"><span>Movimento de segunda a sexta</span><span class="n">28</span></div>
+      <div class="linha"><span>Day use que vira cliente fixa</span><span class="n">29</span></div>
+    </div>
+  </div>
+
+  <!-- V5 -->
+  <div class="versao">
+    <div>
+      <div class="rotulo"><span class="num">05</span><span class="angulo">Autoridade e portfólio</span></div>
+      <div class="capa">
+        <h2>💄 Cliente que escolhe seu trabalho <span class="hl">pelo portfólio</span>, não pelo preço</h2>
+        <ul>
+          <li><span class="e">📸</span>Cliente que ama seu portfólio</li>
+          <li><span class="e">🔥</span>Leads quentes e qualificados</li>
+          <li><span class="e">💄</span>Pele madura e aerografia</li>
+          <li><span class="e">✅</span>Resultados comprovados</li>
+        </ul>
+        <div class="cta">QUERO CLIENTE QUE VALORIZA →</div>
+      </div>
+    </div>
+    <div class="contagem">
+      <div class="cab"><span>texto</span><span>caracteres</span></div>
+      <div class="linha head-line"><span>Cliente que escolhe seu trabalho pelo portfólio, não pelo preço</span><span class="n">63</span></div>
+      <div class="linha"><span>Cliente que ama seu portfólio</span><span class="n">29</span></div>
+      <div class="linha"><span>Leads quentes e qualificados</span><span class="n">28</span></div>
+      <div class="linha"><span>Pele madura e aerografia</span><span class="n">24</span></div>
+      <div class="linha"><span>Resultados comprovados</span><span class="n">22</span></div>
+    </div>
+  </div>
+
+</div>
